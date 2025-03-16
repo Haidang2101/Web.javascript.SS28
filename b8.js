@@ -55,9 +55,10 @@ function timKiemNhanVien() {
 
     if (ketQua.length > 0) {
         console.log("Danh sách nhân viên tìm được:");
-        ketQua.forEach(nv => {
+        for (let i = 0; i < ketQua.length; i++) {
+            let nv = ketQua[i];
             console.log(`ID: ${nv.id}, Tên: ${nv.name}, Vị trí: ${nv.position}, Lương: ${nv.salary}`);
-        });
+        }
     } else {
         console.log("Không tìm thấy nhân viên với tên này.");
     }
