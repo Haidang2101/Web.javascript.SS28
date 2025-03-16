@@ -1,95 +1,101 @@
-let dSachNV = [];
+let employees = [];
 
-function themNhanVien() {
-    let id = prompt("Nhập ID nhân viên:");
-    let name = prompt("Nhập tên nhân viên:");
-    let position = prompt("Nhập vị trí công việc:");
-    let salary = +prompt("Nhập mức lương:");
+function addEmployee() {
+    let id = prompt("ID:");
+    let name = prompt("Tên:");
+    let position = prompt("Vị trí:");
+    let salary = parseFloat(prompt("Lương:"));
 
-    if (dSachNV.some(nv => nv.id === id)) {
-        console.log("ID này đã tồn tại. Vui lòng chọn ID khác.");
-    } else {
-        let nhanVienMoi = {
-            id: id,
-            name: name,
-            position: position,
-            salary: salary
-        };
-        dSachNV.push(nhanVienMoi);
-        console.log("Đã thêm nhân viên mới.");
-    }
+    employees.push({ id, name, position, salary });
+    alert("Thêm thành công");
 }
 
-function xoaNhanVien() {
-    let id = prompt("Nhập ID nhân viên cần xóa:");
+function deleteEmployee() {
+    let id = prompt("Nhập ID cần xóa:");
+    let index = -1;
 
-    let nhanVien = dSachNV.find(nv => nv.id === id);
+    for (let i = 0; i < employees.length; i++) {
+        if (employees[i].id === id) {
+            index = i;
+            break;
+        }
+    }
 
-    if (nhanVien) {
-        let xacNhanXoa = confirm(`Bạn có chắc chắn muốn xóa nhân viên ${nhanVien.name} với ID ${id}?`);
-        if (xacNhanXoa) {
-            dSachNV = dSachNV.filter(nv => nv.id !== id);
-            console.log(`Đã xóa nhân viên với ID ${id}.`);
+    if (index !== -1) {
+        let confirmDelete = prompt("Bạn có chắc muốn xóa nhân viên?(y/n)");
+        if (confirmDelete == "y") {
+            employees.splice(index, 1);
+            alert("Nhân viên đã bị xóa.");
+        } else {
+            alert("Hủy xóa.");
         }
     } else {
-        console.log("Không tìm thấy nhân viên với ID này.");
+        alert("Không tìm thấy ID nhân viên");
     }
 }
 
-function capNhatLuong() {
-    let id = prompt("Nhập ID nhân viên cần cập nhật lương:");
-    let nhanVien = dSachNV.find(nv => nv.id === id);
+function updateSalary() {
+    let id = prompt("Nhập ID cần cập nhật lương:");
+    let employee = null;
 
-    if (nhanVien) {
-        let luongMoi = +prompt(`Nhập mức lương mới cho nhân viên ${nhanVien.name}:`);
-        nhanVien.salary = luongMoi;
-        console.log(`Đã cập nhật mức lương của nhân viên ${nhanVien.name}.`);
+    for (let i = 0; i < employees.length; i++) {
+        if (employees[i].id === id) {
+            employee = employees[i];
+            break;
+        }
+    }
+
+    if (employee) {
+        let salary = parseFloat(prompt("Nhập mức lương mới:"));
+        employee.salary = salary;
+        alert("Cập nhập thành công");
     } else {
-        console.log("Không tìm thấy nhân viên với ID này.");
+        alert("Không tìm thấy ID nhân viên");
     }
 }
 
-function timKiemNhanVien() {
+function searchEmployee() {
     let name = prompt("Nhập tên nhân viên cần tìm:");
-    let ketQua = dSachNV.filter(nv => nv.name.toLowerCase().includes(name.toLowerCase()));
+    let results = [];
 
-    if (ketQua.length > 0) {
-        console.log("Danh sách nhân viên tìm được:");
-        for (let i = 0; i < ketQua.length; i++) {
-            let nv = ketQua[i];
-            console.log(`ID: ${nv.id}, Tên: ${nv.name}, Vị trí: ${nv.position}, Lương: ${nv.salary}`);
+    for (let i = 0; i < employees.length; i++) {
+        if (employees[i].name.toLowerCase().includes(name.toLowerCase())) {
+            results.push(employees[i]);
         }
+    }
+
+    if (results.length > 0) {
+        let message = "Danh sách nhân viên tìm thấy:\n";
+        for (let i = 0; i < results.length; i++) {
+            message += `ID: ${results[i].id}, Tên: ${results[i].name}, Vị trí: ${results[i].position}, Lương: ${results[i].salary}\n`;
+        }
+        alert(message);
     } else {
-        console.log("Không tìm thấy nhân viên với tên này.");
+        alert("Không tìm thấy nhân viên");
     }
 }
 
-function hienThiMenu() {
-    let luaChon;
-    do {
-        luaChon = parseInt(prompt("Chọn chức năng:\n1. Thêm nhân viên mới\n2. Xóa nhân viên theo ID\n3. Cập nhật mức lương\n4. Tìm kiếm nhân viên theo tên\n5. Thoát"));
+let choice;
 
-        switch (luaChon) {
-            case 1:
-                themNhanVien();
-                break;
-            case 2:
-                xoaNhanVien();
-                break;
-            case 3:
-                capNhatLuong();
-                break;
-            case 4:
-                timKiemNhanVien();
-                break;
-            case 5:
-                console.log("Thoát chương trình.");
-                break;
-            default:
-                console.log("Lựa chọn không hợp lệ.");
-                break;
-        }
-    } while (luaChon !== 5);
-}
-
-hienThiMenu();
+do {
+    choice = prompt("MENU\nQuản lý nhân viên:\n1. Thêm nhân viên\n2. Xóa nhân viên theo ID\n3. Cập nhật lương nhân viên\n4. Tìm kiếm nhân viên theo tên\n5. Thoát\nChọn một tùy chọn:");
+    switch (choice) {
+        case "1":
+            addEmployee();
+            break;
+        case "2":
+            deleteEmployee();
+            break;
+        case "3":
+            updateSalary();
+            break;
+        case "4":
+            searchEmployee();
+            break;
+        case "5":
+            alert("Thoát");
+            break;
+        default:
+            alert("Lựa chọn sai");
+    }
+} while (choice !== "5");
